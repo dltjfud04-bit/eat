@@ -1,1 +1,272 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>점심 추천 AI 챗봇</title><link rel="stylesheet" href="style.css"></head><body><div class="container"><h1>🍱 점심 추천 AI 챗봇</h1><div id="chatbox"><div class="bot">안녕하세요 😊<br>"점심때 뭐먹지?" 라고 입력해보세요.</div></div><div class="input-area"><input id="userInput" placeholder="메시지를 입력하세요..."><button onclick="sendMessage()">전송</button></div></div><script src="script.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍱 점심 추천 AI 챗봇</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"맑은 고딕",sans-serif;
+}
+
+body{
+    background:#f2f2f2;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    width:95%;
+    max-width:500px;
+    background:white;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 0 15px rgba(0,0,0,.2);
+}
+
+h1{
+    background:#4CAF50;
+    color:white;
+    padding:18px;
+    text-align:center;
+}
+
+#chatbox{
+    height:420px;
+    overflow-y:auto;
+    padding:15px;
+    background:#fafafa;
+}
+
+.bot,.user{
+    padding:12px;
+    border-radius:10px;
+    margin:10px 0;
+    max-width:80%;
+}
+
+.bot{
+    background:#e6ffe6;
+}
+
+.user{
+    background:#d6ecff;
+    margin-left:auto;
+    text-align:right;
+}
+
+.menu-buttons{
+    display:flex;
+    gap:8px;
+    padding:10px;
+    flex-wrap:wrap;
+}
+
+.menu-buttons button{
+    flex:1;
+    min-width:90px;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    background:#ff9800;
+    color:white;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.menu-buttons button:hover{
+    background:#f57c00;
+}
+
+.input-area{
+    display:flex;
+    border-top:1px solid #ddd;
+}
+
+input{
+    flex:1;
+    padding:15px;
+    border:none;
+    outline:none;
+    font-size:16px;
+}
+
+.input-area button{
+    width:80px;
+    border:none;
+    background:#4CAF50;
+    color:white;
+    cursor:pointer;
+}
+
+@media(max-width:600px){
+    #chatbox{
+        height:60vh;
+    }
+
+    h1{
+        font-size:22px;
+    }
+
+    .menu-buttons button{
+        font-size:14px;
+    }
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>🍱 점심 추천 AI 챗봇</h1>
+
+<div id="chatbox">
+<div class="bot">
+안녕하세요 😊<br>
+"점심때 뭐먹지?" 또는 아래 버튼을 눌러보세요.
+</div>
+</div>
+
+<div class="menu-buttons">
+<button onclick="recommend('한식')">🍚 한식</button>
+<button onclick="recommend('중식')">🥟 중식</button>
+<button onclick="recommend('일식')">🍣 일식</button>
+</div>
+
+<div class="input-area">
+<input type="text" id="userInput" placeholder="메시지를 입력하세요">
+<button onclick="sendMessage()">전송</button>
+</div>
+
+</div>
+
+<script>
+
+const korean=[
+"김치찌개","된장찌개","순두부찌개","부대찌개","제육볶음",
+"불고기","비빔밥","돌솥비빔밥","육개장","갈비탕",
+"설렁탕","감자탕","삼계탕","칼국수","잔치국수",
+"냉면","콩국수","쌈밥","쭈꾸미볶음"
+];
+
+const chinese=[
+"짜장면","짬뽕","볶음밥","마파두부","탕수육",
+"유린기","고추잡채","깐풍기","양장피","마라탕",
+"마라샹궈","훠궈","탄탄면","유산슬","볶음짬뽕"
+];
+
+const japanese=[
+"초밥","회덮밥","돈까스","치킨가스","우동",
+"냉우동","소바","규동","가츠동","오야코동",
+"텐동","라멘","카레","오므라이스","함박스테이크",
+"야끼소바","규카츠"
+];
+
+function addMessage(text,cls){
+
+const chat=document.getElementById("chatbox");
+
+const div=document.createElement("div");
+
+div.className=cls;
+
+div.innerHTML=text;
+
+chat.appendChild(div);
+
+chat.scrollTop=chat.scrollHeight;
+
+}
+
+function recommend(type){
+
+let list=[];
+
+if(type==="한식") list=korean;
+if(type==="중식") list=chinese;
+if(type==="일식") list=japanese;
+
+const food=list[Math.floor(Math.random()*list.length)];
+
+addMessage(type+" 추천","user");
+
+setTimeout(()=>{
+
+addMessage("🍽 오늘의 "+type+" 추천은 <b>"+food+"</b> 입니다! 😋","bot");
+
+},500);
+
+}
+
+function sendMessage(){
+
+const input=document.getElementById("userInput");
+
+const msg=input.value.trim();
+
+if(msg==="") return;
+
+addMessage(msg,"user");
+
+input.value="";
+
+if(msg.includes("한식")){
+recommend("한식");
+return;
+}
+
+if(msg.includes("중식")){
+recommend("중식");
+return;
+}
+
+if(msg.includes("일식")){
+recommend("일식");
+return;
+}
+
+if(msg.includes("점심")){
+
+const all=[...korean,...chinese,...japanese];
+
+const food=all[Math.floor(Math.random()*all.length)];
+
+setTimeout(()=>{
+
+addMessage("🍱 오늘 점심은 <b>"+food+"</b> 어떠세요? 😊","bot");
+
+},500);
+
+}else{
+
+setTimeout(()=>{
+
+addMessage("🍱 '점심때 뭐먹지?' 또는 한식·중식·일식을 입력하거나 아래 버튼을 눌러주세요.","bot");
+
+},500);
+
+}
+
+}
+
+document.getElementById("userInput").addEventListener("keypress",function(e){
+
+if(e.key==="Enter"){
+
+sendMessage();
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
